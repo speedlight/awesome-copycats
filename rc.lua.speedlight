@@ -51,6 +51,7 @@ end
 
 -- run_once("urxvtd")
 -- run_once("unclutter")
+run_once("xscreensaver -no-splash")
 -- }}}
 
 -- {{{ Variable definitions
@@ -77,18 +78,20 @@ iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 
 local layouts = {
-    awful.layout.suit.floating,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.floating,			-- 1
+    awful.layout.suit.tile,			-- 2
+    awful.layout.suit.tile.left,		-- 3
+    awful.layout.suit.tile.bottom,		-- 4
+    awful.layout.suit.tile.top,			-- 5
+    awful.layout.suit.fair,			-- 6
+    awful.layout.suit.fair.horizontal,		-- 7
 }
 -- }}}
 
 -- {{{ Tags
 tags = {
-   names = { "1", "2", "3", "4", "5"},
-   layout = { layouts[1], layouts[2], layouts[3], layouts[1], layouts[4] }
+   names = { "www", "term", "etc", "var", "chat"},
+   layout = { layouts[1], layouts[6], layouts[6], layouts[1], layouts[7] }
 }
 
 for s = 1, screen.count() do
@@ -399,38 +402,38 @@ globalkeys = awful.util.table.join(
     -- awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end),
 
     -- Default client focus
-    awful.key({ altkey }, "k",
+    awful.key({ modkey }, "k",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ altkey }, "j",
+    awful.key({ modkey }, "j",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
 
     -- By direction client focus
-    awful.key({ modkey }, "j",
-        function()
-            awful.client.focus.bydirection("down")
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey }, "k",
-        function()
-            awful.client.focus.bydirection("up")
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey }, "h",
-        function()
-            awful.client.focus.bydirection("left")
-            if client.focus then client.focus:raise() end
-        end),
-    awful.key({ modkey }, "l",
-        function()
-            awful.client.focus.bydirection("right")
-            if client.focus then client.focus:raise() end
-        end),
+    --awful.key({ modkey }, "j",
+    --    function()
+    --        awful.client.focus.bydirection("down")
+    --        if client.focus then client.focus:raise() end
+    --    end),
+    --awful.key({ modkey }, "k",
+    --    function()
+    --        awful.client.focus.bydirection("up")
+    --        if client.focus then client.focus:raise() end
+    --    end),
+    --awful.key({ modkey }, "h",
+    --    function()
+    --        awful.client.focus.bydirection("left")
+    --        if client.focus then client.focus:raise() end
+    --    end),
+    -- awful.key({ modkey }, "l",
+    --    function()
+    --        awful.client.focus.bydirection("right")
+    --        if client.focus then client.focus:raise() end
+    --    end),
 
     -- Show Menu
     awful.key({ modkey }, "w",
@@ -470,6 +473,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r",      awesome.restart),
     awful.key({ modkey, "Shift"   }, "q",      awesome.quit),
+    awful.key({ modkey, "Control" }, "Up",     function () awful.screen.focus(2) end),
+    awful.key({ modkey, "Control" }, "Down",   function () awful.screen.focus(1) end),
 
     -- Dropdown terminal
     awful.key({ modkey,	          }, "z",      function () drop(terminal) end),
@@ -479,24 +484,19 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey,           }, "h",      function () fswidget.show(7) end),
 
     -- ALSA volume control
-    awful.key({ altkey }, "Up",
+    awful.key({ "Control" }, "Up",
         function ()
             awful.util.spawn("amixer -q set Master 1%+")
             volumewidget.update()
         end),
-    awful.key({ altkey }, "Down",
+    awful.key({ "Control" }, "Down",
         function ()
             awful.util.spawn("amixer -q set Master 1%-")
             volumewidget.update()
         end),
-    awful.key({ altkey }, "m",
+    awful.key({ "Control" }, "m",
         function ()
             awful.util.spawn("amixer -q set Master playback toggle")
-            volumewidget.update()
-        end),
-    awful.key({ altkey, "Control" }, "m",
-        function ()
-            awful.util.spawn("amixer -q set Master playback 100%")
             volumewidget.update()
         end),
 
@@ -530,6 +530,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "i", function () awful.util.spawn(browser2) end),
     awful.key({ modkey }, "s", function () awful.util.spawn(gui_editor) end),
     awful.key({ modkey }, "g", function () awful.util.spawn(graphics) end),
+    awful.key({ modkey }, "p", function () awful.util.spawn( "xscreensaver-command -activate", false ) end),
 
     -- Prompt
     awful.key({ modkey }, "r", function () mypromptbox[mouse.screen]:run() end),
@@ -618,8 +619,6 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
 	                   size_hints_honor = false } },
-    { rule = { class = "URxvt" },
-          properties = { opacity = 0.99 } },
 
     { rule = { class = "MPlayer" },
           properties = { floating = true } },
