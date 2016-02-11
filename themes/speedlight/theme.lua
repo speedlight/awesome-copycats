@@ -1,14 +1,16 @@
 --[[
                                              
-     Powerarrow Darker Awesome WM config 2.0 
+     Speedlight Awesome WM config 2.0 
      github.com/copycat-killer               
+     speedlight fork: github.com/speedlight
                                              
 --]]
 
 theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
-theme.wallpaper                     = themes_dir .. "/wall.jpg"
+-- theme.wallpaper                     = themes_dir .. "/wall.png"
+theme.wallpaper_cmd                 = { "nitrogen --restore" }
 
 theme.font                          = "Terminus 9"
 theme.fg_normal                     = "#DDDDFF"
