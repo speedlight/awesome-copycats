@@ -52,6 +52,7 @@ end
 -- run_once("urxvtd")
 -- run_once("unclutter")
 run_once("xscreensaver -no-splash")
+run_once("mpd")
 -- }}}
 
 -- {{{ Variable definitions
@@ -72,7 +73,7 @@ editor_cmd = terminal .. " -e " .. editor
 browser    = "chromium"
 gui_editor = "gvim"
 skype   = "skipe"
-filemanager = "nautilus"
+filemanager = "thunar"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
@@ -90,7 +91,7 @@ local layouts = {
 
 -- {{{ Tags
 tags = {
-   names = { "www", "term", "etc", "var", "chat"},
+   names = { "web", "dev", "shell", "desk", "var"},
    layout = { layouts[1], layouts[6], layouts[6], layouts[1], layouts[7] }
 }
 
