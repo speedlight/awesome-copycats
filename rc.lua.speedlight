@@ -556,8 +556,8 @@ clientkeys = awful.util.table.join(
         end),
     awful.key({ modkey,           }, "m",
         function (c)
-            c.maximized_horizontal = not c.maximized_horizontal
-            c.maximized_vertical   = not c.maximized_vertical
+            c.maximized_horizontal = c.maximized_horizontal
+            c.maximized_vertical   = c.maximized_vertical
         end)
 )
 
@@ -720,7 +720,7 @@ for s = 1, screen.count() do screen[s]:connect_signal("arrange", function ()
 
                 -- No borders with only one visible client
                 elseif #clients == 1 or layout == "max" then
-                    clients[1].border_width = 0
+                    c.border_width = 0
                 else
                     c.border_width = beautiful.border_width
                 end
