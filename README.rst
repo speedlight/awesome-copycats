@@ -1,59 +1,60 @@
-===================
 Awesome WM Copycats
 ===================
 
---------------------------
-Themes for Awesome WM 3.5+
---------------------------
+-------------------------
+Themes for Awesome WM 4.x
+-------------------------
 
 :Author: Luke Bonham <dada [at] archlinux [dot] info>
 :Version: git
 :License: BY-NC-SA_
 :Source: https://github.com/copycat-killer/awesome-copycats
 
+Warning
+=======
+
+If you still have to use branch 3.5.x, you can refer to the commit b0ab0d7_, but be aware that it's no longer supported.
+
 Description
 ===========
 
-A set of themes with the aim of making Awesome_ appearance awesome too!
+A set of themes for the Awesome_ window manager.
 
-Notable features
-================
+Features
+========
 
-- Autohide widgets (*tell me only when you have to*)
+- Autohide widgets
 - Autostart applications
-- Fast MPD and volume shortcuts (first time you see this trick in Awesome)
-- Other shortcuts for copying to the clipboard (goodbye clipboard managers!), toggle wiboxes, widgets popups, screenshots capture, moving and magnifying clients
+- Fast MPD and volume shortcuts (first time this trick has been used in Awesome)
+- Shortcuts for copying to the clipboard (no need for clipboard managers), toggle wiboxes, widgets popups, screenshots capture, moving and magnifying clients
 - Quake drop-down terminal
-- Calendar with current day highlighted and months switch with a click
-- Elegant notifications for new mails, current song, volume level, hdd critical state, low battery
+- Calendar with current day highlighted and months switch with a click/scroll
+- Notifications for new mails, current song, volume level, hdd critical state, low battery
 - OpenWeatherMap integration
 - Net carrier status notifier
-- Colorful autoupdating icons
 - Symbolic tag names
-- TXT layoutbox
-- PNG wibox bar
+- DWM-like textual layoutbox
+- Cairo wibar
 - Custom layouts
 - No borders when there's only one visible client
-- Powerful volume bar
-- Menubar menu
+- Freedesktop.org compliant menu and desktop icons
 - Vi-like client focus
-- Nice client border (colors change along with processes status)
 - Non-empty tag browsing
-- Dynamic useless gaps
+- On-the-fly useless gaps resize
 - Dynamic tagging
 
 Gallery
 =======
 
-**Multicolor** inspired by tip_
+**Multicolor**, inspired by lucamanni_
 
 .. image:: http://dotshare.it/public/images/uploads/650.png
 
-**Powerarrow Darker** inspired by romockee_
+**Powerarrow Darker**, inspired by romockee_
 
 .. image:: http://dotshare.it/public/images/uploads/649.png
 
-**Steamburn** copycatted from ok100_ [porting from dwm]
+**Steamburn**, porting of ok100_'s dwm
 
 .. image:: http://dotshare.it/public/images/uploads/648.png
 
@@ -69,67 +70,74 @@ Gallery
 
 .. image:: http://dotshare.it/public/images/uploads/606.png
 
-**Holo** requested by amouly_
+**Holo**, requested by amouly_
 
-.. image:: http://dotshare.it/public/images/uploads/651.png
+.. image:: http://dotshare.it/public/images/uploads/651.jpg
 
-**Copland** inspired by foozer_
+**Copland**, inspired by foozer_
 
 .. image:: http://dotshare.it/public/images/uploads/655.png
 
 Installation
 ============
 
-Using git you can have the full master branch: ::
+With Git: ::
 
-    git clone --recursive https://github.com/copycat-killer/awesome-copycats.git
+    $ git clone --recursive https://github.com/copycat-killer/awesome-copycats.git
+    $ mv -bv awesome-copycats/* ~/.config/awesome; rm -r awesome-copycats
 
-then, move the contents of `awesome-copycats` to `~/.config/awesome`.
+otherwise: ::
 
-Otherwise, download the latest two masters of ``awesome-copycats`` and ``lain`` (1_ and 2_), extract the first one, extract the second one into the first one, and put the contents of the first one into your Awesome directory.
+    $ wget https://github.com/copycat-killer/awesome-copycats/archive/master.zip -O awesome-copycats.zip
+    $ wget https://github.com/copycat-killer/lain/archive/master.zip -O lain.zip
+    $ wget https://github.com/copycat-killer/awesome-freedesktop/archive/master.zip -O freedesktop.zip
+    $ unzip '*.zip'; rm *.zip
+    $ mv lain-master awesome-copycats-master/lain; mv awesome-freedesktop-master awesome-copycats-master/freedesktop
+    $ mv -bv awesome-copycats-master/* ~/.config/awesome; rm -r awesome-copycats-master
 
 Usage
 =====
 
 Switch a theme this way: ::
 
-    cd ~/.config/awesome
-    cp rc.lua.theme rc.lua
+    $ cd ~/.config/awesome
+    $ cp rc.lua.theme rc.lua
 
 Alternatively, you can use `switch-theme.sh`_, which will also update to the latest commit.
 
-Then customize your ``rc.lua`` and restart Awesome (``Mod4 + ctrl + r``).
+Then, customize your ``rc.lua`` and restart Awesome (``Mod4 + ctrl + r``).
 
 Notes
 =====
 
-Only compatible with **stable** versions of Lua and Awesome (git/unstable versions are *not* supported).
+Complements are provided by lain_.
 
-Complements are provided by lain_: be sure to meet its dependencies_.
-
-Fonts are Terminus_ (Multicolor, Powerarrow Darker) and Tamsyn_ (other ones).
+Fonts are Terminus_ (Multicolor, Powerarrow Darker), Tamzen_ (Copland), Roboto_ (Holo) and Tamsyn_ (other ones).
 
 Every theme has a colorscheme_.
 
-Blackburn and Dremora use Icons_: be sure to have bitmaps enabled if running under Debian_ or Ubuntu_.
+Blackburn and Dremora use Icons_: be sure to have bitmaps enabled if running under Debian_ or Ubuntu_. If you want more glyphs, try FontAwesome_.
 
-Feel free to email me if you have any request.
+Additional software used: ::
 
-.. _BY-NC-SA: http://creativecommons.org/licenses/by-nc-sa/4.0/
-.. _Awesome: http://awesome.naquadah.org/
-.. _tip: https://bbs.archlinux.org/profile.php?id=51327
+    unclutter firefox scrot mpd mpc dmenu xsel
+
+.. _BY-NC-SA: http://creativecommons.org/licenses/by-nc-sa/4.0
+.. _b0ab0d7: https://github.com/copycat-killer/awesome-copycats/tree/b0ab0d7837987be81b9195a36631df773113d491
+.. _Awesome: http://github.com/awesomeWM/awesome
+.. _lucamanni: https://github.com/lucamanni/awesome
 .. _romockee: https://github.com/romockee/powerarrow
 .. _ok100: http://ok100.deviantart.com/art/DWM-January-2013-348656846
 .. _amouly: https://bbs.archlinux.org/viewtopic.php?pid=1307158#p1307158
-.. _foozer: http://dotshare.it/dots/499/
-.. _1: https://github.com/copycat-killer/awesome-copycats/archive/master.zip
-.. _2: https://github.com/copycat-killer/lain/archive/master.zip
+.. _foozer: http://dotshare.it/dots/499
 .. _`switch-theme.sh`: https://github.com/copycat-killer/awesome-copycats/issues/36
 .. _lain: https://github.com/copycat-killer/lain
-.. _dependencies: https://github.com/copycat-killer/lain/wiki
-.. _Terminus: http://terminus-font.sourceforge.net/
-.. _Tamsyn: http://www.fial.com/~scott/tamsyn-font/
+.. _Terminus: http://terminus-font.sourceforge.net
+.. _Tamzen: https://github.com/sunaku/tamzen-font
+.. _Roboto: https://fonts.google.com/specimen/Roboto
+.. _Tamsyn: http://www.fial.com/~scott/tamsyn-font
 .. _colorscheme: https://github.com/copycat-killer/dots/tree/master/.colors
 .. _Icons: https://github.com/copycat-killer/dots/tree/master/.fonts
 .. _Debian: http://weiwu.sdf.org/100921.html
 .. _Ubuntu: https://wiki.ubuntu.com/Fonts#Enabling_Bitmapped_Fonts
+.. _FontAwesome: https://github.com/FortAwesome/Font-Awesome
