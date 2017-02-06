@@ -68,6 +68,7 @@ local terminal     = "terminator" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "vi"
 local gui_editor   = "gvim"
 local browser      = "firefox"
+local mail      = "thunderbird"
 local file_manager = "thunar"
 
 awful.util.terminal = terminal
@@ -382,10 +383,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "v", function () awful.spawn("xsel -b | xsel") end),
 
     -- User programs
-    awful.key({ modkey }, "e", function () awful.spawn(gui_editor) end,
-        {description = "text editor", group = "programs"}),
+    awful.key({ modkey }, "e", function () awful.spawn(mail) end,
+        {description = "mail (s1t4)", group = "programs"}),
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
-        {description = "browser", group = "programs"}),
+        {description = "browser (s1t1)", group = "programs"}),
     awful.key({ modkey }, "t", function () awful.spawn(file_manager) end,
         {description = "file manager", group = "programs"}),
     awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
