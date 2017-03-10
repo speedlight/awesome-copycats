@@ -72,7 +72,7 @@ local mail      = "thunderbird"
 local file_manager = "thunar"
 local skype = "skype"
 local amixer = "xterm alsamixer -fn -misc-fixed-medium-r-normal-20-200-75-75-c-100-iso-8859-1 -geometry 90x20+320+240 -T amixer"
-local screen-shooter= "xfce4-screenshooter"
+local screen_shooter = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "web", "shell", "dir", "com", "chat", "var" }
@@ -401,7 +401,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "a", function () awful.spawn(amixer) end,
         {description = "amixer", group = "PROGRAMS"}),
     awful.key({ modkey }, "c", function () awful.spawn(screen-shooter) end,
-        {description = "screen-shooter", group = "PROGRAMS"}),
+        {description = "screen_shooter", group = "PROGRAMS"}),
 
     -- Prompt
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
