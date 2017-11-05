@@ -1,9 +1,8 @@
-
 --[[
-                                    
-     Steamburn Awesome WM theme 3.0 
-     github.com/copycat-killer      
-                                    
+
+     Steamburn Awesome WM theme 3.0
+     github.com/lcpz
+
 --]]
 
 local gears = require("gears")
@@ -156,9 +155,9 @@ theme.fs = lain.widget.fs({
 -- Battery
 local bat = lain.widget.bat({
     settings = function()
-        bat_perc = bat_now.perc
-        if bat_now.ac_status == 1 then bat_perc = "Plug" end
-        widget:set_markup(markup.font(theme.font, markup(gray, " Bat ") .. bat_perc .. " "))
+        local perc = bat_now.perc
+        if bat_now.ac_status == 1 then perc = "Plug" end
+        widget:set_markup(markup.font(theme.font, markup(gray, " Bat ") .. perc .. " "))
     end
 })
 

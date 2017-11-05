@@ -1,15 +1,15 @@
-
 --[[
-                           
- Vertex Awesome WM theme   
- github.com/copycat-killer 
-                           
+
+ Vertex Awesome WM theme
+ github.com/lcpz
+
 --]]
 
-local gears        = require("gears")
-local lain         = require("lain")
-local awful        = require("awful")
-local wibox        = require("wibox")
+local gears = require("gears")
+local lain  = require("lain")
+local awful = require("awful")
+local wibox = require("wibox")
+
 local math, string, tag, tonumber, type, os = math, string, tag, tonumber, type, os
 
 local theme                                     = {}
@@ -157,7 +157,7 @@ local bat = lain.widget.bat({
         end
 
         baticon:set_image(theme[index])
-        battooltip:set_markup(string.format("\n%s%%, %s", bat_now.perc, bat_now.time))
+        battooltip:set_markup(string.format("\n%s%%, %s", perc, bat_now.time))
     end
 })
 
@@ -426,23 +426,24 @@ function theme.at_screen_connect(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 25, bg = gears.color.create_png_pattern(theme.panelbg) })
 
+    local wiboxlayout = wibox.layout.align.horizontal()
+    wiboxlayout.expand = "none"
     -- Add widgets to the wibox
     s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
+        layout = wiboxlayout,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             s.mypromptbox,
             tspace1,
-            wibox.container.constraint(s.mytasklist, "exact", s.workarea.width/2.6),
+            s.mytasklist,
         },
         { -- Middle widgets
-            layout = wibox.layout.flex.horizontal,
-            space,
+            layout = wibox.layout.fixed.horizontal,
             mytextclock,
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            wibox.container.constraint(wibox.widget { nil, nil, theme.mpd.widget, layout = wibox.layout.align.horizontal }, "exact", s.workarea.width/3),
+            wibox.widget { nil, nil, theme.mpd.widget, layout = wibox.layout.align.horizontal },
             rspace0,
             theme.weather.icon,
             theme.weather.widget,
