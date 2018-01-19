@@ -76,29 +76,29 @@ local htop = "xterm htop -fn -misc-fixed-medium-r-normal-20-200-75-75-c-100-iso-
 local screen_shooter = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "web", "shell", "dir", "com", "chat", "var" }
+awful.util.tagnames = { " ⏣ ", " ⎇ ", " ⎒ ", " ⌬ ", " ⎑ ", " ⎐ " }
 awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
+    awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    lain.layout.termfair,
     --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
     --awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
     --awful.layout.suit.max,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
-    awful.layout.suit.corner.nw,
-    awful.layout.suit.corner.ne,
-    awful.layout.suit.corner.sw,
-    awful.layout.suit.corner.se,
+    --awful.layout.suit.corner.nw,
+    --awful.layout.suit.corner.ne,
+    --awful.layout.suit.corner.sw,
+    --awful.layout.suit.corner.se,
     --lain.layout.cascade,
     --lain.layout.cascade.tile,
     --lain.layout.centerwork,
     --lain.layout.centerwork.horizontal,
-    --lain.layout.termfair,
     --lain.layout.termfair.center,
 }
 awful.util.taglist_buttons = awful.util.table.join(
