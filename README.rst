@@ -107,7 +107,7 @@ in ``rc.lua``, and
 * configure widgets
 * define wiboxes and screen settings
 
-in ``theme.lua``, so that you just need to change ``chosen_theme`` variable in ``rc.lua`` to preserve your preferences *and* switch the theme, instead of having multiple redundant ``rc.lua``s.
+in ``theme.lua``, so that you just need to change ``chosen_theme`` variable in ``rc.lua`` to preserve your preferences *and* switch the theme, instead of having file redundancy.
 
 Just do the following:
 
@@ -142,9 +142,9 @@ Every theme has a colorscheme_.
 
 Blackburn and Dremora use Icons_, Vertex uses FontAwesome_: be sure to have bitmaps enabled if running under Debian or Ubuntu_.
 
-Additional software used: ::
+Additional default software used: ::
 
-    unclutter firefox scrot mpd mpc dmenu xsel
+    unclutter firefox scrot mpd mpc dmenu xsel xlock
 
 .. _BY-NC-SA: http://creativecommons.org/licenses/by-nc-sa/4.0
 .. _b0ab0d7: https://github.com/lcpz/awesome-copycats/tree/b0ab0d7837987be81b9195a36631df773113d491
