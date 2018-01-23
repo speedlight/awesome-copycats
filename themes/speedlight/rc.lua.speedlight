@@ -65,14 +65,14 @@ local altkey       = "Mod1"
 
 -- {{{ Programs and Utils
 local terminal     = "terminator" or "xterm"
-local editor       = os.getenv("EDITOR") or "nano" or "vi"
+local editor       = os.getenv("EDITOR") or "nano" or "nvim"
 local gui_editor   = "gvim"
 local browser      = "firefox"
 local mail      = "thunderbird"
 local file_manager = "thunar"
 local skype = "skype"
-local amixer = "xterm alsamixer -fn -misc-fixed-medium-r-normal-20-200-75-75-c-100-iso-8859-1 -geometry 90x20+320+240 -T amixer"
-local htop = "xterm htop -fn -misc-fixed-medium-r-normal-20-200-75-75-c-100-iso-8859-1 -geometry 90x20+240+180 -T htop"
+local amixer = "terminator --borderless -T alsamixer --geometry=550x350+240+180 -e alsamixer"
+local htop = "terminator --borderless -T htop --geometry=550x320+240+180 -e htop"
 local screen_shooter = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
@@ -394,7 +394,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "t", function () awful.spawn(file_manager) end,
         {description = "file manager", group = "PROGRAMS"}),
     awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
-        {description = "terminal", group = "programs"}),
+        {description = "terminal", group = "PROGRAMS"}),
     awful.key({ modkey }, "p", function () awful.spawn( "xscreensaver-command -activate", false ) end,
         {description = "xscreensaver", group = "PROGRAMS"}),
     awful.key({ modkey }, "y", function () awful.spawn(skype) end,
@@ -523,7 +523,7 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = true } },
+      properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },

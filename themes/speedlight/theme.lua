@@ -2,7 +2,7 @@
 --[[
                                             
      Speedlight Awesome WM theme 2.0 
-     A copycat-killer fork, just added my own theme
+     A copycat-killer fork, just added my own
      github.com/speedlight/awesome-copycats              
                                             
 --]]
@@ -16,7 +16,7 @@ local os    = { getenv = os.getenv }
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "xos4 Terminus 9"
+theme.font                                      = "xos4 Source Code Pro 09"
 theme.fg_normal                                 = "#DDDDFF"
 theme.fg_focus                                  = "#EA6F81"
 theme.fg_urgent                                 = "#CC9393"
@@ -105,7 +105,7 @@ local clock = lain.widget.watch({
 theme.cal = lain.widget.calendar({
     attach_to = { clock.widget },
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = "xos4 Terminus 08",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -162,6 +162,14 @@ local mem = lain.widget.mem({
     end
 })
 
+-- SYSLOAD
+local loadicon = wibox.widget.imagebox(theme.widget_cpu)
+local sysload = lain.widget.sysload({
+    settings = function()
+        widget:set_markup(markup.font(theme.font, " " .. load_1 .. " ; " .. load_5 .. " "))
+    end
+})
+
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
@@ -182,7 +190,7 @@ local temp = lain.widget.temp({
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 theme.fs = lain.widget.fs({
     options  = "--exclude-type=tmpfs",
-    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
+    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 09" },
     settings = function()
         widget:set_markup(markup.font(theme.font, " " .. fs_now.used .. "% "))
     end
@@ -248,7 +256,7 @@ local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
 
 function theme.at_screen_connect(s)
     -- Quake application
-    s.quake = lain.util.quake({ app = awful.util.terminal })
+    -- s.quake = lain.util.quake({ app = awful.util.terminal })
 
     -- If wallpaper is a function, call it with the screen
     if type(theme.wallpaper) == "function" then
@@ -303,12 +311,12 @@ function theme.at_screen_connect(s)
             wibox.container.background(mailicon, theme.bg_focus),
             --wibox.container.background(mail.widget, theme.bg_focus),
             arrl_dl,
+            cpuicon,
+            sysload.widget,
             memicon,
             mem.widget,
-            arrl_ld,
-            wibox.container.background(cpuicon, theme.bg_focus),
-            wibox.container.background(cpu.widget, theme.bg_focus),
-            arrl_dl,
+            cpuicon,
+            cpu.widget,
             tempicon,
             temp.widget,
             arrl_ld,
