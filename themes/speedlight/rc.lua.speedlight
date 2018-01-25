@@ -55,6 +55,7 @@ end
 
 run_once("xscreensaver -no-splash")
 run_once("mpd")
+run_once("nm-applet")
 run_once("unclutter -root")
 -- }}}
 
@@ -68,12 +69,12 @@ local terminal     = "terminator" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "nvim"
 local gui_editor   = "gvim"
 local browser      = "firefox"
-local mail      = "thunderbird"
+local mail         = "thunderbird"
 local file_manager = "thunar"
-local skype = "skype"
-local amixer = "terminator --borderless -T alsamixer --geometry=550x350+240+180 -e alsamixer"
-local htop = "terminator --borderless -T htop --geometry=550x320+240+180 -e htop"
-local screen_shooter = "xfce4-screenshooter"
+local skype        = "skype"
+local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
+local htop         = "terminator -T htop --geometry=550x320+240+180 -e htop"
+local sshooter     = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { " ⏣ ", " ⎇ ", " ⎒ ", " ⌬ ", " ⎑ ", " ⎐ " }
@@ -401,7 +402,7 @@ globalkeys = awful.util.table.join(
         {description = "skype (s1t5)", group = "PROGRAMS"}),
     awful.key({ modkey }, "a", function () awful.spawn(amixer) end,
         {description = "amixer", group = "PROGRAMS"}),
-    awful.key({ modkey }, "c", function () awful.spawn(screen_shooter) end,
+    awful.key({ modkey }, "c", function () awful.spawn(sshooter) end,
         {description = "screen_shooter", group = "PROGRAMS"}),
     awful.key({ modkey }, "h", function () awful.spawn(htop) end,
         {description = "htop", group = "PROGRAMS"}),
@@ -523,7 +524,7 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = false } },
+      properties = { titlebars_enabled = true } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },
@@ -537,7 +538,9 @@ awful.rules.rules = {
     -- Set alsamixer windows to float.
     { rule = { name = "amixer" },
       properties = { floating = true } },
-
+    -- Set htop windows to float.
+    { rule = { name = "htop" },
+      properties = { floating = true, titlebars_enabled = false } },
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true, titlebars_enabled = false } },
 }
