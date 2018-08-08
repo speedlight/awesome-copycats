@@ -1,7 +1,7 @@
 --[[
 
- Vertex Awesome WM theme
- github.com/lcpz
+     Vertex Awesome WM theme
+     github.com/lcpz
 
 --]]
 
@@ -11,6 +11,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 
 local math, string, tag, tonumber, type, os = math, string, tag, tonumber, type, os
+local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.default_dir                               = require("awful.util").get_themes_dir() .. "default"
@@ -21,6 +22,7 @@ theme.taglist_font                              = "FontAwesome 17"
 theme.fg_normal                                 = "#FFFFFF"
 theme.fg_focus                                  = "#6A95EB"
 theme.bg_focus                                  = "#303030"
+theme.bg_focus2                                 = "#3762B8"
 theme.bg_normal                                 = "#242424"
 theme.fg_urgent                                 = "#CC9393"
 theme.bg_urgent                                 = "#006B8E"
@@ -32,8 +34,8 @@ theme.tooltip_border_width                      = theme.border_width
 theme.menu_height                               = 24
 theme.menu_width                                = 140
 theme.awesome_icon                              = theme.icon_dir .. "/awesome.png"
-theme.taglist_squares_sel                       = theme.icon_dir .. "/square_sel.png"
-theme.taglist_squares_unsel                     = theme.icon_dir .. "/square_unsel.png"
+theme.taglist_squares_sel                       = gears.surface.load_from_shape(3, 30, gears.shape.rectangle, theme.fg_focus)
+theme.taglist_squares_unsel                     = gears.surface.load_from_shape(3, 30, gears.shape.rectangle, theme.bg_focus2)
 theme.panelbg                                   = theme.icon_dir .. "/panel.png"
 theme.bat000charging                            = theme.icon_dir .. "/bat-000-charging.png"
 theme.bat000                                    = theme.icon_dir .. "/bat-000.png"
@@ -103,7 +105,7 @@ theme.titlebar_maximized_button_normal_active   = theme.default_dir.."/titlebar/
 theme.titlebar_maximized_button_focus_active    = theme.default_dir.."/titlebar/maximized_focus_active.png"
 
 -- http://fontawesome.io/cheatsheet
-awful.util.tagnames = { " ", " ", " ", " ", " ", " ", " ", " ", " " }
+awful.util.tagnames = { "", "", "", "", "", "", "", "" }
 
 local markup = lain.util.markup
 
@@ -205,30 +207,30 @@ theme.volume = lain.widget.alsabar({
         volicon:set_image(theme[index])
     end
 })
-volicon:buttons(gears.table.join (
+volicon:buttons(my_table.join (
           awful.button({}, 1, function()
-            awful.spawn.with_shell(string.format("%s -e alsamixer", awful.util.terminal))
+            awful.spawn(string.format("%s -e alsamixer", awful.util.terminal))
           end),
           awful.button({}, 2, function()
-            awful.spawn(string.format("%s set %s 100%%", theme.volume.cmd, theme.volume.channel))
+            os.execute(string.format("%s set %s 100%%", theme.volume.cmd, theme.volume.channel))
             theme.volume.notify()
           end),
           awful.button({}, 3, function()
-            awful.spawn(string.format("%s set %s toggle", theme.volume.cmd, theme.volume.togglechannel or theme.volume.channel))
+            os.execute(string.format("%s set %s toggle", theme.volume.cmd, theme.volume.togglechannel or theme.volume.channel))
             theme.volume.notify()
           end),
           awful.button({}, 4, function()
-            awful.spawn(string.format("%s set %s 1%%+", theme.volume.cmd, theme.volume.channel))
+            os.execute(string.format("%s set %s 1%%+", theme.volume.cmd, theme.volume.channel))
             theme.volume.notify()
           end),
           awful.button({}, 5, function()
-            awful.spawn(string.format("%s set %s 1%%-", theme.volume.cmd, theme.volume.channel))
+            os.execute(string.format("%s set %s 1%%-", theme.volume.cmd, theme.volume.channel))
             theme.volume.notify()
           end)
 ))
 
 -- Wifi carrier and signal strength
-local wificon = wibox.widget.imagebox()
+local wificon = wibox.widget.imagebox(theme.wifidisc)
 local wifitooltip = awful.tooltip({
     objects = { wificon },
     margin_leftright = 15,
@@ -307,7 +309,7 @@ local barcolor = gears.color({
     type  = "linear",
     from  = { 0, 46 },
     to    = { 46, 46 },
-    stops = { {0, theme.bg_focus}, {0.9, "#457be7"} }
+    stops = { {0, theme.bg_focus}, {0.9, theme.bg_focus2} }
 })
 
 local barcolor2 = gears.color({
@@ -323,7 +325,7 @@ end
 
 function theme.vertical_wibox(s)
     -- Create the vertical wibox
-    s.dockheight = (40 *  s.workarea.height)/100
+    s.dockheight = (35 *  s.workarea.height)/100
 
     s.myleftwibox = wibox({ screen = s, x=0, y=s.workarea.height/2 - s.dockheight/2, width = 6, height = s.dockheight, fg = theme.fg_normal, bg = barcolor2, ontop = true, visible = true, type = "dock" })
 
@@ -348,7 +350,7 @@ function theme.vertical_wibox(s)
     s.docktimer = gears.timer{ timeout = 2 }
     s.docktimer:connect_signal("timeout", function()
         local s = awful.screen.focused()
-        s.myleftwibox.width = 6
+        s.myleftwibox.width = 9
         s.layoutb.visible = false
         mylauncher.visible = false
         if s.docktimer.started then
@@ -357,7 +359,7 @@ function theme.vertical_wibox(s)
     end)
     tag.connect_signal("property::selected", function(t)
         local s = t.screen or awful.screen.focused()
-        s.myleftwibox.width = 46
+        s.myleftwibox.width = 38
         s.layoutb.visible = true
         mylauncher.visible = true
         gears.surface.apply_shape_bounding(s.myleftwibox, dockshape)
@@ -368,14 +370,14 @@ function theme.vertical_wibox(s)
 
     s.myleftwibox:connect_signal("mouse::leave", function()
         local s = awful.screen.focused()
-        s.myleftwibox.width = 6
+        s.myleftwibox.width = 9
         s.layoutb.visible = false
         mylauncher.visible = false
     end)
 
     s.myleftwibox:connect_signal("mouse::enter", function()
         local s = awful.screen.focused()
-        s.myleftwibox.width = 46
+        s.myleftwibox.width = 38
         s.layoutb.visible = true
         mylauncher.visible = true
         gears.surface.apply_shape_bounding(s.myleftwibox, dockshape)
@@ -404,7 +406,7 @@ function theme.at_screen_connect(s)
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(gears.table.join(
+    s.mylayoutbox:buttons(my_table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
