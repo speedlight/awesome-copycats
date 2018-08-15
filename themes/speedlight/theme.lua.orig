@@ -1,7 +1,6 @@
 --[[
-
-     Powerarrow Dark Awesome WM theme
-     github.com/lcpz
+     Speedlight Awesome WM theme 2.0
+     github.com/speedlight/awesome-copycats
 
 --]]
 
@@ -9,14 +8,15 @@ local gears = require("gears")
 local lain  = require("lain")
 local awful = require("awful")
 local wibox = require("wibox")
-
-local os = { getenv = os.getenv }
+-- local os    = { getenv = os.getenv }
+local os, math, string    = os, math, string
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
-theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
+theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
+theme.lain_icons                                = os.getenv("HOME") .. "/.config/awesome/lain/icons"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "xos4 Terminus 9"
+theme.font                                      = "xos4 Source Code Pro 09"
 theme.fg_normal                                 = "#DDDDFF"
 theme.fg_focus                                  = "#EA6F81"
 theme.fg_urgent                                 = "#CC9393"
@@ -37,6 +37,7 @@ theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.p
 theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
 theme.layout_tile                               = theme.dir .. "/icons/tile.png"
+theme.layout_tilegaps                           = theme.dir .. "/icons/tilegaps.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/tileleft.png"
 theme.layout_tilebottom                         = theme.dir .. "/icons/tilebottom.png"
 theme.layout_tiletop                            = theme.dir .. "/icons/tiletop.png"
@@ -48,6 +49,7 @@ theme.layout_max                                = theme.dir .. "/icons/max.png"
 theme.layout_fullscreen                         = theme.dir .. "/icons/fullscreen.png"
 theme.layout_magnifier                          = theme.dir .. "/icons/magnifier.png"
 theme.layout_floating                           = theme.dir .. "/icons/floating.png"
+theme.layout_termfair                           = theme.lain_icons .. "/icons/layou/default/termfair.png"
 theme.widget_ac                                 = theme.dir .. "/icons/ac.png"
 theme.widget_battery                            = theme.dir .. "/icons/battery.png"
 theme.widget_battery_low                        = theme.dir .. "/icons/battery_low.png"
@@ -90,20 +92,22 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/
 local markup = lain.util.markup
 local separators = lain.util.separators
 
+--[[
 -- Textclock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local clock = awful.widget.watch(
-    "date +'%a %d %b %R'", 60,
+local clock = awful.widget.watch({
+    timeout  = 60,
+    cmd      = " date +'%a %d %b %R'",
     function(widget, stdout)
         widget:set_markup(" " .. markup.font(theme.font, stdout))
     end
-)
+})
 
 -- Calendar
 theme.cal = lain.widget.calendar({
-    attach_to = { clock },
+    attach_to = { clock.widget },
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = "xos4 Terminus 08",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -112,8 +116,8 @@ theme.cal = lain.widget.calendar({
 -- Mail IMAP check
 local mailicon = wibox.widget.imagebox(theme.widget_mail)
 --[[ commented because it needs to be set before use
-mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
-local mail = lain.widget.imap({
+mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.util.spawn(mail) end)))
+local mail = lain.widgets.imap({
     timeout  = 180,
     server   = "server",
     mail     = "mail",
@@ -131,22 +135,11 @@ local mail = lain.widget.imap({
 --]]
 
 -- MPD
-local musicplr = awful.util.terminal .. " -title Music -g 130x34-320+16 -e ncmpcpp"
 local mpdicon = wibox.widget.imagebox(theme.widget_music)
 mpdicon:buttons(my_table.join(
-    awful.button({ modkey }, 1, function () awful.spawn.with_shell(musicplr) end),
-    awful.button({ }, 1, function ()
-        os.execute("mpc prev")
-        theme.mpd.update()
-    end),
-    awful.button({ }, 2, function ()
-        os.execute("mpc toggle")
-        theme.mpd.update()
-    end),
-    awful.button({ }, 3, function ()
-        os.execute("mpc next")
-        theme.mpd.update()
-    end)))
+  awful.button({ }, 1, function () awful.spawn_with_shell(musicplr) end)
+  )
+)
 theme.mpd = lain.widget.mpd({
     settings = function()
         if mpd_now.state == "play" then
@@ -174,6 +167,15 @@ local mem = lain.widget.mem({
     end
 })
 
+-- SYSLOAD
+local loadicon = wibox.widget.imagebox(theme.widget_cpu)
+local sysload = lain.widget.sysload({
+    settings = function()
+        widget:set_markup(markup.font(theme.font, " " .. load_1 .. " ; " .. load_5 .. " "))
+    end
+})
+
+
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
@@ -181,6 +183,7 @@ local cpu = lain.widget.cpu({
         widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
     end
 })
+
 
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
@@ -190,20 +193,23 @@ local temp = lain.widget.temp({
     end
 })
 
+
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 theme.fs = lain.widget.fs({
-    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
+    options  = "--exclude-type=tmpfs",
+    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 08", width=450 },
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. fs_now["/"].percentage .. "% "))
+        widget:set_markup(markup.font(theme.font, " " .. fs_now.used .. "% "))
     end
 })
+
 
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_battery)
 local bat = lain.widget.bat({
     settings = function()
-        if bat_now.status and bat_now.status ~= "N/A" then
+        if bat_now.status ~= "N/A" then
             if bat_now.ac_status == 1 then
                 widget:set_markup(markup.font(theme.font, " AC "))
                 baticon:set_image(theme.widget_ac)
@@ -223,6 +229,7 @@ local bat = lain.widget.bat({
     end
 })
 
+
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
 theme.volume = lain.widget.alsa({
@@ -241,6 +248,7 @@ theme.volume = lain.widget.alsa({
     end
 })
 
+
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
@@ -252,6 +260,7 @@ local net = lain.widget.net({
     end
 })
 
+
 -- Separators
 local spr     = wibox.widget.textbox(' ')
 local arrl_dl = separators.arrow_left(theme.bg_focus, "alpha")
@@ -259,7 +268,7 @@ local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
 
 function theme.at_screen_connect(s)
     -- Quake application
-    s.quake = lain.util.quake({ app = awful.util.terminal })
+    -- s.quake = lain.util.quake({ app = awful.util.terminal })
 
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
@@ -315,12 +324,12 @@ function theme.at_screen_connect(s)
             wibox.container.background(mailicon, theme.bg_focus),
             --wibox.container.background(mail.widget, theme.bg_focus),
             arrl_dl,
+            cpuicon,
+            sysload.widget,
             memicon,
             mem.widget,
-            arrl_ld,
-            wibox.container.background(cpuicon, theme.bg_focus),
-            wibox.container.background(cpu.widget, theme.bg_focus),
-            arrl_dl,
+            cpuicon,
+            cpu.widget,
             tempicon,
             temp.widget,
             arrl_ld,
@@ -333,12 +342,12 @@ function theme.at_screen_connect(s)
             wibox.container.background(neticon, theme.bg_focus),
             wibox.container.background(net.widget, theme.bg_focus),
             arrl_dl,
-            clock,
+            clock.widget,
             spr,
             arrl_ld,
             wibox.container.background(s.mylayoutbox, theme.bg_focus),
         },
     }
 end
-
+--]]
 return theme
