@@ -404,36 +404,37 @@ globalkeys = my_table.join(
               {description = "-10%", group = "hotkeys"}),
 
     -- ALSA volume control
-    awful.key({ altkey }, "Up",
+    awful.key({ "Control" }, "Up",
         function ()
             os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-        {description = "volume up", group = "hotkeys"}),
-    awful.key({ altkey }, "Down",
+        {description = "volume up", group = "audio"}),
+    awful.key({ "Control" }, "Down",
         function ()
             os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-        {description = "volume down", group = "hotkeys"}),
-    awful.key({ altkey }, "m",
+        {description = "volume down", group = "audio"}),
+    awful.key({ "Control" }, "m",
         function ()
             os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
             beautiful.volume.update()
         end,
-        {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "m",
+        {description = "toggle mute", group = "audio"}),
+    --[[awful.key({ altkey, "Control" }, "m",
         function ()
             os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-        {description = "volume 100%", group = "hotkeys"}),
+        {description = "volume 100%", group = "audio"}),
     awful.key({ altkey, "Control" }, "0",
         function ()
             os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-        {description = "volume 0%", group = "hotkeys"}),
+        {description = "volume 0%", group = "audio"}),
+    --]]
 
     -- MPD control
     awful.key({ altkey, "Control" }, "Up",
@@ -441,25 +442,25 @@ globalkeys = my_table.join(
             os.execute("mpc toggle")
             beautiful.mpd.update()
         end,
-        {description = "mpc toggle", group = "widgets"}),
+        {description = "mpc toggle", group = "audio"}),
     awful.key({ altkey, "Control" }, "Down",
         function ()
             os.execute("mpc stop")
             beautiful.mpd.update()
         end,
-        {description = "mpc stop", group = "widgets"}),
+        {description = "mpc stop", group = "audio"}),
     awful.key({ altkey, "Control" }, "Left",
         function ()
             os.execute("mpc prev")
             beautiful.mpd.update()
         end,
-        {description = "mpc prev", group = "widgets"}),
+        {description = "mpc prev", group = "audio"}),
     awful.key({ altkey, "Control" }, "Right",
         function ()
             os.execute("mpc next")
             beautiful.mpd.update()
         end,
-        {description = "mpc next", group = "widgets"}),
+        {description = "mpc next", group = "audio"}),
     awful.key({ altkey }, "0",
         function ()
             local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
@@ -472,7 +473,7 @@ globalkeys = my_table.join(
             end
             naughty.notify(common)
         end,
-        {description = "mpc on/off", group = "widgets"}),
+        {description = "mpc on/off", group = "audio"}),
 
     -- Copy primary to clipboard (terminals to gtk)
     awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
