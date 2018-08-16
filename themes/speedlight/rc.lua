@@ -56,7 +56,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+run_once({ "urxvtd", "unclutter -root", "xscreensaver -no-splash", "nm-applet" }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -89,15 +89,19 @@ local themes = {
 local chosen_theme = themes[11]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "urxvtc"
+local terminal     = "terminator"
 local editor       = os.getenv("EDITOR") or "vim"
-local gui_editor   = "gvim"
+local guieditor   = "geany"
 local browser      = "firefox"
-local guieditor    = "atom"
 local scrlocker    = "slock"
+local mail         = "thunderbird"
+local file_manager = "thunar"
+local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
+local htop         = "terminator -T htop --geometry=550x320+240+180 -e htop"
+local sshooter     = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { " ⏣ ", " ⎇ ", " ⎒ ", " ⌬ ", " ⎑ ", " ⎐ " }
 awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -119,8 +123,8 @@ awful.layout.layouts = {
     --lain.layout.cascade.tile,
     --lain.layout.centerwork,
     --lain.layout.centerwork.horizontal,
-    --lain.layout.termfair,
-    --lain.layout.termfair.center,
+    lain.layout.termfair,
+    lain.layout.termfair.center,
 }
 
 awful.util.taglist_buttons = my_table.join(
@@ -228,12 +232,12 @@ root.buttons(my_table.join(
 globalkeys = my_table.join(
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end,
-              {description = "take a screenshot", group = "hotkeys"}),
+    --awful.key({ altkey }, "p", function() os.execute("screenshot") end,
+    --          {description = "take a screenshot", group = "hotkeys"}),
 
     -- X screen locker
-    awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
-              {description = "lock screen", group = "hotkeys"}),
+    --awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
+    --          {description = "lock screen", group = "hotkeys"}),
 
     -- Hotkeys
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -246,11 +250,12 @@ globalkeys = my_table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
-    -- Non-empty tag browsing
+    --[[ Non-empty tag browsing
     awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
               {description = "view  previous nonempty", group = "tag"}),
     awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
               {description = "view  previous nonempty", group = "tag"}),
+    --]]
 
     -- Default client focus
     awful.key({ altkey,           }, "j",
@@ -340,12 +345,12 @@ globalkeys = my_table.join(
               {description = "move tag to the left", group = "tag"}),
     awful.key({ modkey, "Shift" }, "Right", function () lain.util.move_tag(1) end,
               {description = "move tag to the right", group = "tag"}),
-    awful.key({ modkey, "Shift" }, "d", function () lain.util.delete_tag() end,
-              {description = "delete tag", group = "tag"}),
+    --awful.key({ modkey, "Shift" }, "d", function () lain.util.delete_tag() end,
+    --          {description = "delete tag", group = "tag"}),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
+              {description = "terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -380,16 +385,17 @@ globalkeys = my_table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Dropdown application
-    awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end,
-              {description = "dropdown application", group = "launcher"}),
+    --awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end,
+    --          {description = "dropdown application", group = "launcher"}),
 
-    -- Widgets popups
+    --[[ Widgets popups
     awful.key({ altkey, }, "c", function () lain.widget.calendar.show(7) end,
               {description = "show calendar", group = "widgets"}),
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
     awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
               {description = "show weather", group = "widgets"}),
+    --]]
 
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
@@ -476,11 +482,22 @@ globalkeys = my_table.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
+    awful.key({ modkey }, "e", function () awful.spawn(mail) end,
+        {description = "mail (s1t4)", group = "launcher"}),
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
-              {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
-              {description = "run gui editor", group = "launcher"}),
-
+        {description = "browser (s1t1)", group = "launcher"}),
+    awful.key({ modkey }, "t", function () awful.spawn(file_manager) end,
+        {description = "file manager", group = "launcher"}),
+    awful.key({ modkey }, "p", function () awful.spawn( "xscreensaver-command -activate", false ) end,
+        {description = "xscreensaver", group = "hotkeys"}),
+    awful.key({ modkey }, "z", function () awful.spawn(amixer) end,
+        {description = "amixer", group = "hotkeys"}),
+    awful.key({ }, "Print", function () awful.spawn(sshooter) end,
+        {description = "screen_shooter", group = "hotkeys"}),
+    awful.key({ modkey }, "h", function () awful.spawn(htop) end,
+        {description = "htop", group = "hotkeys"}),
+    awful.key({ modkey }, "l", function () awful.spawn("systemctl suspend", false) end,
+        {description = "suspend", group = "hotkeys"}),
     -- Default
     --[[ Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
@@ -527,8 +544,8 @@ clientkeys = my_table.join(
               {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
-              {description = "toggle keep on top", group = "client"}),
+    --awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
+    --          {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
@@ -639,14 +656,20 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = true } },
+      properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },
       properties = { screen = 1, tag = awful.util.tagnames[1] } },
-
-    { rule = { class = "Gimp", role = "gimp-image-window" },
-          properties = { maximized = true } },
+    -- Set Thunderbird to always map on the fourth tag on screen 4.
+    { rule = { class = "Thunderbird" },
+      properties = { screen = 1, tag = awful.util.tagnames[4] } },
+    -- Set alsamixer windows to float.
+    { rule = { name = "amixer" },
+      properties = { floating = true } },
+    -- Set htop windows to float.
+    { rule = { name = "htop" },
+      properties = { floating = true, titlebars_enabled = false } },
 }
 -- }}}
 
