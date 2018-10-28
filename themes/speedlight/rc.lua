@@ -56,7 +56,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root", "xscreensaver -no-splash", "nm-applet" }) -- entries must be separated by commas
+run_once({ "unclutter -root", "xscreensaver -no-splash", "nm-applet" }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -149,6 +149,7 @@ awful.util.tasklist_buttons = my_table.join(
         if c == client.focus then
             c.minimized = true
         else
+            c.minimized = false
             c:emit_signal("request::activate", "tasklist", {raise = true})
         end
     end),
