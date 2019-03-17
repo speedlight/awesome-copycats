@@ -1,1 +1,1 @@
-themes/speedlight/rc.lua
+/home/speedlight/.config/awesome/themes/speedlight/rc.lua
