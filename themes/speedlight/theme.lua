@@ -107,13 +107,8 @@ local binclock = require("themes.powerarrow.binclock"){
     color_inactive = theme.bg_focus
 }
 
--- Textclock
---local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local clock = awful.widget.textclock(" %a %d ")
-clock.font = theme.font
-
 -- Calendar
-theme.cal = lain.widget.calendar({
+theme.cal = lain.widget.cal({
     --cal = "cal --color=always",
     attach_to = { binclock.widget },
     notification_preset = {
@@ -123,6 +118,12 @@ theme.cal = lain.widget.calendar({
     }
 })
 
+-- Taskwarrior
+local task = wibox.widget.imagebox(theme.widget_task)
+lain.widget.contrib.task.attach(task, {
+    -- do not colorize output
+    show_cmd = "task | sed -r 's/\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g'"
+})
 task:buttons(my_table.join(awful.button({}, 1, lain.widget.contrib.task.prompt)))
 
 -- Scissors (xsel copy and paste)
@@ -130,10 +131,10 @@ task:buttons(my_table.join(awful.button({}, 1, lain.widget.contrib.task.prompt))
 --scissors:buttons(my_table.join(awful.button({}, 1, function() awful.spawn.with_shell("xsel | xsel -i -b") end)))
 
 -- Mail IMAP check
-local mailicon = wibox.widget.imagebox(theme.widget_mail)
 --[[ commented because it needs to be set before use
+local mailicon = wibox.widget.imagebox(theme.widget_mail)
 mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
-local mail = lain.widget.imap({
+theme.mail = lain.widget.imap({
     timeout  = 180,
     server   = "server",
     mail     = "mail",
@@ -224,10 +225,12 @@ local temp = lain.widget.temp({
         widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
     end
 })
+--]]
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
+--[[ commented because it needs Gio/Glib >= 2.54
 theme.fs = lain.widget.fs({
     notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
     settings = function()
@@ -235,6 +238,7 @@ theme.fs = lain.widget.fs({
         widget:set_markup(markup.font(theme.font, fsp))
     end
 })
+--]]
 
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_battery)
@@ -295,6 +299,9 @@ local function pl(widget, bgcolor, padding)
 end
 
 function theme.at_screen_connect(s)
+    -- Quake application
+    s.quake = lain.util.quake({ app = awful.util.terminal })
+
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
     if type(wallpaper) == "function" then
@@ -329,6 +336,7 @@ function theme.at_screen_connect(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            --spr,
             s.mytaglist,
             s.mypromptbox,
             spr,
@@ -344,6 +352,7 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6), theme.bg_focus),
             wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6), theme.bg_focus),
             arrow(theme.bg_normal, "#343434"),
+            wibox.container.background(wibox.container.margin(task, 3, 7), "#343434"),
             arrow("#343434", "#777E76"),
             wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#777E76"),
             arrow("#777E76", "#4B696D"),
@@ -359,6 +368,7 @@ function theme.at_screen_connect(s)
             arrow("#C0C0A2", "#777E76"),
             wibox.container.background(wibox.container.margin(binclock.widget, 4, 8), "#777E76"),
             arrow("#777E76", "alpha"),
+            --]]
             s.mylayoutbox,
         },
     }
