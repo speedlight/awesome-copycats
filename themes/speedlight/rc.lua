@@ -493,7 +493,11 @@ globalkeys = my_table.join(
     awful.key({ modkey }, "h", function () awful.spawn(htop) end,
         {description = "htop", group = "hotkeys"}),
     awful.key({ modkey }, "l", function () awful.spawn("systemctl suspend", false) end,
-        {description = "suspend", group = "hotkeys"})
+        {description = "suspend", group = "hotkeys"}),
+    -- Prompt
+    awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
+              {description = "run prompt", group = "launcher"})
+    --]]
 )
 
 clientkeys = my_table.join(
@@ -718,4 +722,3 @@ end
 client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("focus", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
