@@ -101,7 +101,6 @@ local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
 local sshooter     = "xfce4-screenshooter"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { " ⏣ ", " ⎇ ", " ⎒ ", " ⌬ ", " ⎑ ", " ⎐ " }
 awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
