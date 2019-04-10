@@ -16,14 +16,15 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "xos4 Source Code Pro 9"
+theme.font                                      = "xos4 3270 11"
 theme.fg_normal                                 = "#FEFEFE"
 theme.fg_focus                                  = "#32D6FF"
 theme.fg_urgent                                 = "#C83F11"
 theme.bg_normal                                 = "#222222"
 theme.bg_focus                                  = "#1E2320"
 theme.bg_urgent                                 = "#3F3F3F"
-theme.taglist_fg_focus                          = "#00CCFF"
+theme.taglist_fg_focus                          = "#D32568"
+theme.taglist_fg_occupied                       = "#6981D4"
 theme.tasklist_bg_focus                         = "#222222"
 theme.tasklist_fg_focus                         = "#00CCFF"
 theme.border_width                              = 1
@@ -39,8 +40,8 @@ theme.menu_height                               = 16
 theme.menu_width                                = 140
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.awesome_icon                              = theme.dir .. "/icons/awesome.png"
-theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
-theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
+--theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
+--theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
 theme.layout_tile                               = theme.dir .. "/icons/tile.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/tileleft.png"
 theme.layout_tilebottom                         = theme.dir .. "/icons/tilebottom.png"
@@ -115,7 +116,7 @@ theme.cal = lain.widget.cal({
     --cal = "cal --color=always",
     attach_to = { binclock.widget },
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = "xos4 3270 10",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -305,7 +306,7 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
 
     -- Tags
-    awful.util.tagnames = { " web ", " dev ", " file ", " var ", " chat " }
+    awful.util.tagnames = { " web ", " dev ", " desk ", " var ", " com " }
     awful.tag(awful.util.tagnames, s, awful.layout.layouts)
 
     -- Create a promptbox for each screen
@@ -326,7 +327,7 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 16, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal .. "ee" })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -355,7 +356,7 @@ function theme.at_screen_connect(s)
     }
 
     -- Create the bottom wibox
-    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, height = 16, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal .. "ee" })
 
     -- Add widgets to the bottom wibox
     s.mybottomwibox:setup {
