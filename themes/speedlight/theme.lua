@@ -99,6 +99,7 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/
 
 local markup = lain.util.markup
 local separators = lain.util.separators
+local spr = wibox.widget.textbox(' ')
 
 -- Binary clock
 local binclock = require("themes.powerarrow.binclock"){
@@ -109,7 +110,7 @@ local binclock = require("themes.powerarrow.binclock"){
 }
 
 -- Date from textclock
-local textclock = wibox.widget.textclock(markup(theme.fg_normal, "%d %B  "))
+local textclock = wibox.widget.textclock(markup(theme.fg_normal, "%a %d %B  "))
 
 -- Calendar
 theme.cal = lain.widget.cal({
@@ -324,10 +325,10 @@ function theme.at_screen_connect(s)
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
 
     -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
+    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal .. "ee" })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -336,39 +337,35 @@ function theme.at_screen_connect(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             s.mypromptbox,
-            spr,
         },
         { -- Middle widgets
             layout = wibox.layout.fixed.horizontal,
-            spr,
             s.mytaglist,
-            spr,
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             arrow(theme.bg_normal, "#777E76"),
             wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#777E76"),
             wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#777E76"),
-            arrow("#777E76", theme.bg_normal),
+            arrow("#777E76", "#8DAA9A"),
+            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
+            arrow("#8DAA9A", theme.bg_normal),
             wibox.widget.systray(),
             s.mylayoutbox,
         },
     }
 
     -- Create the bottom wibox
-    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal .. "ee" })
+    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, height = 16, fg = theme.fg_normal, bg = theme.bg_normal })
 
     -- Add widgets to the bottom wibox
     s.mybottomwibox:setup {
         layout = wibox.layout.align.horizontal,
-        { -- Right widgets
-            layout = wibox.layout.align.horizontal,
-            s.mytasklist,
-        },
         spr,
+        s.mytasklist,
         { -- Left widgets
-            arrow(theme.bg_normal, "#777E76"),
             layout = wibox.layout.fixed.horizontal,
+            arrow(theme.bg_normal, "#777E76"),
             wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#777E76"),
             arrow("#777E76", "#4B696D"),
             wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), "#4B696D"),
@@ -376,9 +373,7 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4), "#4B3B51"),
             arrow("#4B3B51", "#CB755B"),
             wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#CB755B"),
-            arrow("#CB755B", "#8DAA9A"),
-            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
-            arrow("#8DAA9A", "#4A6D76"),
+            arrow("#CB755B", "#4A6D76"),
             wibox.container.background(wibox.container.margin(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#4A6D76"),
             arrow("#4A6D76", "#777E76"),
             wibox.container.background(wibox.container.margin(binclock.widget, 4, 8), "#777E76"),
