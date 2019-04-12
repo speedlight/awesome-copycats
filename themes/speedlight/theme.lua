@@ -23,8 +23,10 @@ theme.fg_urgent                                 = "#C83F11"
 theme.bg_normal                                 = "#222222"
 theme.bg_focus                                  = "#1E2320"
 theme.bg_urgent                                 = "#3F3F3F"
-theme.taglist_fg_focus                          = "#D32568"
-theme.taglist_fg_occupied                       = "#6981D4"
+theme.taglist_bg_focus                          = "#D32568"
+theme.taglist_bg_occupied                       = "#6981D4"
+theme.taglist_bg_empty                           = "#3F3F3F"
+theme.taglist_shape                             = gears.shape.rectangle
 theme.tasklist_bg_focus                         = "#222222"
 theme.tasklist_fg_focus                         = "#00CCFF"
 theme.border_width                              = 1
@@ -40,8 +42,6 @@ theme.menu_height                               = 16
 theme.menu_width                                = 140
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.awesome_icon                              = theme.dir .. "/icons/awesome.png"
---theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
---theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
 theme.layout_tile                               = theme.dir .. "/icons/tile.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/tileleft.png"
 theme.layout_tilebottom                         = theme.dir .. "/icons/tilebottom.png"
@@ -306,10 +306,6 @@ function theme.at_screen_connect(s)
     end
     gears.wallpaper.maximized(wallpaper, s, true)
 
-    -- Tags
-    awful.util.tagnames = { " web ", " dev ", " desk ", " var ", " com " }
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
-
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -321,8 +317,23 @@ function theme.at_screen_connect(s)
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(-1) end)))
 
+    -- Tags
+    awful.util.tagnames = { "      ", "      ", "      ", "      ", "      " }
+    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+
     -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+    s.mytaglist = awful.widget.taglist {
+        screen = s,
+        filter = awful.widget.taglist.filter.all,
+        style = { shape = theme.taglist_shape },
+        layout = { 
+            spacing = 5,
+            layout = wibox.layout.fixed.horizontal
+        },
+        buttons = awful.util.taglist_buttons,
+    }
+    mytaglistcont = wibox.container.background(s.mytaglist, theme.bg_focus, gears.shape.rectangle)
+    s.mytag = wibox.container.margin(mytaglistcont, 0, 0, 5, 5)
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags)
@@ -340,7 +351,7 @@ function theme.at_screen_connect(s)
         },
         { -- Middle widgets
             layout = wibox.layout.fixed.horizontal,
-            s.mytaglist,
+            s.mytag,
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
