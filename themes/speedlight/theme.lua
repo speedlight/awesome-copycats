@@ -17,17 +17,18 @@ local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "xos4 3270 11"
+theme.fontwibox                                 = "xos4 3270 9"
 theme.fg_normal                                 = "#FEFEFE"
 theme.fg_focus                                  = "#32D6FF"
 theme.fg_urgent                                 = "#C83F11"
-theme.bg_normal                                 = "#222222"
+theme.bg_normal                                 = "#000000"
 theme.bg_focus                                  = "#1E2320"
 theme.bg_urgent                                 = "#3F3F3F"
 theme.taglist_bg_focus                          = "#D32568"
 theme.taglist_bg_occupied                       = "#6981D4"
 theme.taglist_bg_empty                           = "#3F3F3F"
 theme.taglist_shape                             = gears.shape.rectangle
-theme.tasklist_bg_focus                         = "#222222"
+theme.tasklist_bg_focus                         = "#000000"
 theme.tasklist_fg_focus                         = "#00CCFF"
 theme.border_width                              = 1
 theme.border_normal                             = "#3F3F3F"
@@ -114,10 +115,9 @@ local textclock = wibox.widget.textclock(markup(theme.fg_normal, "%a %d %B  "))
 
 -- Calendar
 theme.cal = lain.widget.cal({
-    --cal = "cal --color=always",
     attach_to = { binclock.widget },
     notification_preset = {
-        font = "xos4 3270 10",
+        font = "xos4 3270 9",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -162,7 +162,7 @@ theme.volume = lain.widget.alsa({
             volicon:set_image(theme.widget_vol)
         end
 
-        widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
+        widget:set_markup(markup.font(theme.fontwibox, " " .. volume_now.level .. "% "))
     end
 })
 
@@ -189,9 +189,9 @@ theme.mpd = lain.widget.mpd({
             artist = " " .. mpd_now.artist .. " "
             title  = mpd_now.title  .. " "
             mpdicon:set_image(theme.widget_music_on)
-            widget:set_markup(markup.font(theme.font, markup("#FF8466", artist) .. " " .. title))
+            widget:set_markup(markup.font(theme.fontwibox, markup("#FF8466", artist) .. " " .. title))
         elseif mpd_now.state == "pause" then
-            widget:set_markup(markup.font(theme.font, " mpd paused "))
+            widget:set_markup(markup.font(theme.fontwibox, " mpd paused "))
             mpdicon:set_image(theme.widget_music_pause)
         else
             widget:set_text("")
@@ -204,7 +204,7 @@ theme.mpd = lain.widget.mpd({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. mem_now.used .. "MB "))
+        widget:set_markup(markup.font(theme.fontwibox, " " .. mem_now.used .. "MB "))
     end
 })
 
@@ -212,14 +212,14 @@ local mem = lain.widget.mem({
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
+        widget:set_markup(markup.font(theme.fontwibox, " " .. cpu_now.usage .. "% "))
     end
 })
 
 -- Coretemp (lain, average)
 local temp = lain.widget.temp({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
+        widget:set_markup(markup.font(theme.fontwibox, " " .. coretemp_now .. "°C "))
     end
 })
 --]]
@@ -229,10 +229,10 @@ local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 -- Comment if having issues because it needs Gio/Glib >= 2.54
 theme.fs = lain.widget.fs({
-    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
+    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 9" },
     settings = function()
         local fsp = string.format(" %3.2f %s ", fs_now["/"].free, fs_now["/"].units)
-        widget:set_markup(markup.font(theme.font, fsp))
+        widget:set_markup(markup.font(theme.fontwibox, fsp))
     end
 })
 --]]
@@ -243,7 +243,7 @@ local bat = lain.widget.bat({
     settings = function()
         if bat_now.status and bat_now.status ~= "N/A" then
             if bat_now.ac_status == 1 then
-                widget:set_markup(markup.font(theme.font, " AC "))
+                widget:set_markup(markup.font(theme.fontwibox, " AC "))
                 baticon:set_image(theme.widget_ac)
                 return
             elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
@@ -265,7 +265,7 @@ local bat = lain.widget.bat({
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
-        widget:set_markup(markup.font(theme.font,
+        widget:set_markup(markup.font(theme.fontwibox,
                           markup("#7AC82E", " " .. net_now.received) .. " ↓↑ " .. 
                           markup("#46A8C3", " " .. net_now.sent .. " "))
                           )
@@ -347,22 +347,22 @@ function theme.at_screen_connect(s)
         expand = "none",
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            s.mypromptbox,
+            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3)),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4)),
+            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4)),
+            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
+            wibox.container.background(wibox.container.margin(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
         },
         { -- Middle widgets
             layout = wibox.layout.fixed.horizontal,
             s.mytag,
+            s.mypromptbox,
         },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            arrow(theme.bg_normal, "#777E76"),
-            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#777E76"),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#777E76"),
-            arrow("#777E76", "#8DAA9A"),
-            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
-            arrow("#8DAA9A", theme.bg_normal),
-            wibox.widget.systray(),
-            s.mylayoutbox,
+            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
+            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
+            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
         },
     }
 
@@ -376,20 +376,10 @@ function theme.at_screen_connect(s)
         s.mytasklist,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            arrow(theme.bg_normal, "#777E76"),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#777E76"),
-            arrow("#777E76", "#4B696D"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), "#4B696D"),
-            arrow("#4B696D", "#4B3B51"),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4), "#4B3B51"),
-            arrow("#4B3B51", "#CB755B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#CB755B"),
-            arrow("#CB755B", "#4A6D76"),
-            wibox.container.background(wibox.container.margin(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#4A6D76"),
-            arrow("#4A6D76", "#777E76"),
-            wibox.container.background(wibox.container.margin(binclock.widget, 4, 8), "#777E76"),
-            wibox.container.background(textclock, "#777E76"),
-            arrow("#777E76", theme.bg_normal),
+            wibox.container.background(wibox.container.margin(binclock.widget, 4, 8)),
+            wibox.container.background(textclock),
+            wibox.widget.systray(),
+            s.mylayoutbox,
         },
     }
 end
