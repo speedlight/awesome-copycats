@@ -16,8 +16,8 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "xos4 3270 11"
-theme.fontwibox                                 = "xos4 3270 9"
+theme.font                                      = "IBM 3270 9"
+theme.fontwibox                                 = "IBM 3270 10"
 theme.fg_normal                                 = "#FEFEFE"
 theme.fg_focus                                  = "#32D6FF"
 theme.fg_urgent                                 = "#C83F11"
@@ -26,7 +26,8 @@ theme.bg_focus                                  = "#1E2320"
 theme.bg_urgent                                 = "#3F3F3F"
 theme.taglist_bg_focus                          = "#D32568"
 theme.taglist_bg_occupied                       = "#6981D4"
-theme.taglist_bg_empty                           = "#3F3F3F"
+theme.taglist_bg_urgent                         = "#DAA520"
+theme.taglist_bg_empty                          = "#3F3F3F"
 theme.taglist_shape                             = gears.shape.rectangle
 theme.tasklist_bg_focus                         = "#000000"
 theme.tasklist_fg_focus                         = "#00CCFF"
@@ -55,23 +56,24 @@ theme.layout_max                                = theme.dir .. "/icons/max.png"
 theme.layout_fullscreen                         = theme.dir .. "/icons/fullscreen.png"
 theme.layout_magnifier                          = theme.dir .. "/icons/magnifier.png"
 theme.layout_floating                           = theme.dir .. "/icons/floating.png"
-theme.widget_ac                                 = theme.dir .. "/icons/ac.png"
-theme.widget_battery                            = theme.dir .. "/icons/battery.png"
-theme.widget_battery_low                        = theme.dir .. "/icons/battery_low.png"
-theme.widget_battery_empty                      = theme.dir .. "/icons/battery_empty.png"
-theme.widget_mem                                = theme.dir .. "/icons/mem.png"
-theme.widget_cpu                                = theme.dir .. "/icons/cpu.png"
-theme.widget_temp                               = theme.dir .. "/icons/temp.png"
-theme.widget_net                                = theme.dir .. "/icons/net.png"
-theme.widget_hdd                                = theme.dir .. "/icons/hdd.png"
-theme.widget_music                              = theme.dir .. "/icons/note.png"
-theme.widget_music_on                           = theme.dir .. "/icons/note_on.png"
+theme.widget_ac                                 = theme.dir .. "/alticons/ac.png"
+theme.widget_battery                            = theme.dir .. "/alticons/battery.png"
+theme.widget_battery_low                        = theme.dir .. "/alticons/battery_low.png"
+theme.widget_battery_empty                      = theme.dir .. "/alticons/battery_empty.png"
+theme.widget_mem                                = theme.dir .. "/alticons/mem.png"
+theme.widget_cpu                                = theme.dir .. "/alticons/cpu.png"
+theme.widget_temp                               = theme.dir .. "/alticons/temp.png"
+theme.widget_net                                = theme.dir .. "/alticons/net.png"
+theme.widget_hdd                                = theme.dir .. "/alticons/hdd.png"
+theme.widget_music                              = theme.dir .. "/alticons/note.png"
+theme.widget_music_on                           = theme.dir .. "/alticons/note_on.png"
 theme.widget_music_pause                        = theme.dir .. "/icons/pause.png"
 theme.widget_music_stop                         = theme.dir .. "/icons/stop.png"
-theme.widget_vol                                = theme.dir .. "/icons/vol.png"
-theme.widget_vol_low                            = theme.dir .. "/icons/vol_low.png"
-theme.widget_vol_no                             = theme.dir .. "/icons/vol_no.png"
-theme.widget_vol_mute                           = theme.dir .. "/icons/vol_mute.png"
+theme.widget_vol_hi                             = theme.dir .. "/alticons/vol_hi.png"
+theme.widget_vol_low                            = theme.dir .. "/alticons/vol_low.png"
+theme.widget_vol_mid                            = theme.dir .. "/alticons/vol_mid.png"
+theme.widget_vol_no                             = theme.dir .. "/alticons/vol_no.png"
+theme.widget_vol_mute                           = theme.dir .. "/alticons/vol_mute.png"
 theme.widget_mail                               = theme.dir .. "/icons/mail.png"
 theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.png"
 theme.widget_task                               = theme.dir .. "/icons/task.png"
@@ -158,8 +160,10 @@ theme.volume = lain.widget.alsa({
             volicon:set_image(theme.widget_vol_no)
         elseif tonumber(volume_now.level) <= 50 then
             volicon:set_image(theme.widget_vol_low)
+        elseif tonumber(volume_now.level) <= 80 then
+            volicon:set_image(theme.widget_vol_mid)
         else
-            volicon:set_image(theme.widget_vol)
+            volicon:set_image(theme.widget_vol_hi)
         end
 
         widget:set_markup(markup.font(theme.fontwibox, " " .. volume_now.level .. "% "))
@@ -267,7 +271,7 @@ local net = lain.widget.net({
     settings = function()
         widget:set_markup(markup.font(theme.fontwibox,
                           markup("#7AC82E", " " .. net_now.received) .. " ↓↑ " .. 
-                          markup("#46A8C3", " " .. net_now.sent .. " "))
+                          markup("#A846C3", " " .. net_now.sent .. " "))
                           )
     end
 })
@@ -332,7 +336,7 @@ function theme.at_screen_connect(s)
         },
         buttons = awful.util.taglist_buttons,
     }
-    mytaglistcont = wibox.container.background(s.mytaglist, theme.bg_focus, gears.shape.rectangle)
+    mytaglistcont = wibox.container.background(s.mytaglist, theme.bg_normal, gears.shape.rectangle)
     s.mytag = wibox.container.margin(mytaglistcont, 0, 0, 5, 5)
 
     -- Create a tasklist widget
@@ -347,22 +351,24 @@ function theme.at_screen_connect(s)
         expand = "none",
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
+            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
+            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
+            spr,
+            s.mypromptbox,
+        },
+        { -- Middle widgets
+            layout = wibox.layout.fixed.horizontal,
+            s.mytag,
+            spr,
+        },
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
             wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3)),
             wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4)),
             wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4)),
             wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
             wibox.container.background(wibox.container.margin(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
-        },
-        { -- Middle widgets
-            layout = wibox.layout.fixed.horizontal,
-            s.mytag,
-            s.mypromptbox,
-        },
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6)),
-            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
         },
     }
 
