@@ -125,10 +125,6 @@ theme.cal = lain.widget.cal({
     }
 })
 
--- Scissors (xsel copy and paste)
---local scissors = wibox.widget.imagebox(theme.widget_scissors)
---scissors:buttons(my_table.join(awful.button({}, 1, function() awful.spawn.with_shell("xsel | xsel -i -b") end)))
-
 -- Mail IMAP check
 --[[ commented because it needs to be set before use
 local mailicon = wibox.widget.imagebox(theme.widget_mail)
@@ -230,8 +226,8 @@ local temp = lain.widget.temp({
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 
 -- / fs
-local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 -- Comment if having issues because it needs Gio/Glib >= 2.54
+local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 theme.fs = lain.widget.fs({
     notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 9" },
     settings = function()
