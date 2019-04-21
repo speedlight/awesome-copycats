@@ -21,19 +21,8 @@ local freedesktop   = require("freedesktop")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 -- }}}
 
--- Local applications
-local terminal     = "terminator"
-local editor       = os.getenv("EDITOR") or "vim"
-local guieditor    = "geany"
-local browser      = "firefox"
-local scrlocker    = "slock"
-local mail         = "thunderbird"
-local file_manager = "terminator -T ranger --geometry=1024+768+180 -e ranger"
-local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
-local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
-local sshooter     = "xfce4-screenshooter"
-
 -- Modular configuration (required)
+local terminal     = "terminator"
 local keys = require("keys")
 
 -- {{{ Error handling
