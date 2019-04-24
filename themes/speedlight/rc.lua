@@ -58,7 +58,7 @@ local function run_once(cmd_arr)
 end
 -- }}}
 
-run_once({ "xscreensaver -no-splash", "nm-applet" }) -- entries must be separated by commas
+run_once({ "xscreensaver -no-splash", "nm-applet", "setxkbmap -option ctrl:nocaps" }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
