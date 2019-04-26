@@ -12,6 +12,7 @@ local keys = {}
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 -- Default applications
+local terminal     = "terminator"
 local editor       = os.getenv("EDITOR") or "vim"
 local guieditor    = "geany"
 local browser      = "firefox"
