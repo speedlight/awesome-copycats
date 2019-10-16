@@ -104,8 +104,11 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 local spr = wibox.widget.textbox(' ')
 
+-- Digital clock
+local clock = wibox.widget.textclock(markup(theme.fg_normal, "%H:%M "))
+
 -- Binary clock
-local binclock = require("themes.powerarrow.binclock"){
+local binclock = require("themes.speedlight.binclock"){
     height = 16,
     show_seconds = true,
     color_active = theme.fg_normal,
@@ -113,7 +116,7 @@ local binclock = require("themes.powerarrow.binclock"){
 }
 
 -- Date from textclock
-local textclock = wibox.widget.textclock(markup(theme.fg_normal, "%a %d %B  "))
+local dateclock = wibox.widget.textclock(markup(theme.fg_normal, "%a %d %B  "))
 
 -- Calendar
 theme.cal = lain.widget.cal({
@@ -379,7 +382,8 @@ function theme.at_screen_connect(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.container.background(wibox.container.margin(binclock.widget, 4, 8)),
-            wibox.container.background(textclock),
+            wibox.container.background(clock),
+            wibox.container.background(dateclock),
             wibox.widget.systray(),
             s.mylayoutbox,
         },
