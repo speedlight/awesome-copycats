@@ -20,7 +20,8 @@ local scrlocker    = "slock"
 local mail         = "thunderbird"
 local file_manager = "terminator -T ranger --geometry=1024+768+180 -e ranger"
 local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
-local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
+--local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
+local htop         = "urxvt -geometry 180x35 -title htop -e htop"
 local sshooter     = "xfce4-screenshooter"
 
 -- {{{ Mouse bindings
@@ -49,12 +50,12 @@ keys.globalkeys = my_table.join(
               {description = "go back", group = "tag"}),
 
     -- Default client focus
-    awful.key({ altkey,           }, "j",
+    awful.key({ altkey,           }, "k",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}),
-    awful.key({ altkey,           }, "k",
+    awful.key({ altkey,           }, "j",
         function ()
             awful.client.focus.byidx(-1)
         end,
