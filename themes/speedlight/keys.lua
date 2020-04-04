@@ -20,8 +20,9 @@ local scrlocker    = "slock"
 local mail         = "thunderbird"
 local file_manager = "terminator -T ranger --geometry=1024+768+180 -e ranger"
 local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
---local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
-local htop         = "urxvt -geometry 180x35 -title htop -e htop"
+local tsbx         = "terminator -T tsbx -e tsbx.sh"
+local vwsbx        = "terminator -T vagrant -c VWorkflow -e vwsbx.sh"
+local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
 local sshooter     = "xfce4-screenshooter"
 
 -- {{{ Mouse bindings
@@ -227,12 +228,16 @@ keys.globalkeys = my_table.join(
         {description = "mail (s1t4)", group = "launcher"}),
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
         {description = "browser (s1t1)", group = "launcher"}),
-    awful.key({ modkey }, "t", function () awful.spawn(file_manager) end,
+    awful.key({ modkey }, "a", function () awful.spawn(file_manager) end,
         {description = "file manager", group = "launcher"}),
     awful.key({ modkey }, "p", function () awful.spawn( "xscreensaver-command -activate", false ) end,
         {description = "xscreensaver", group = "hotkeys"}),
     awful.key({ modkey }, "z", function () awful.spawn(amixer) end,
         {description = "amixer", group = "launcher"}),
+    awful.key({ modkey }, "t", function () awful.spawn(tsbx) end,
+        {description = "tsbx", group = "hotkeys"}),
+    awful.key({ modkey }, "v", function () awful.spawn(vwsbx) end,
+        {description = "vwsbx", group = "hotkeys"}),
     awful.key({ }, "Print", function () awful.spawn(sshooter) end,
         {description = "screen_shooter", group = "hotkeys"}),
     awful.key({ modkey }, "h", function () awful.spawn(htop) end,

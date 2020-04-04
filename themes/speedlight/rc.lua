@@ -58,7 +58,11 @@ local function run_once(cmd_arr)
 end
 -- }}}
 
-run_once({ "xscreensaver -no-splash", "nm-applet", "setxkbmap -option ctrl:nocaps", "xrdb ~/.Xresources" }) -- entries must be separated by commas
+run_once({ "xscreensaver -no-splash", 
+    "nm-applet", 
+    "setxkbmap -option ctrl:nocaps",
+    "xrdb ~/.Xresources" 
+  }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -195,22 +199,35 @@ awful.rules.rules = {
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
       properties = { titlebars_enabled = false } },
+-- }}}
+
+-- Rules to apply to user workflow
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },
       properties = { screen = 1, tag = awful.util.tagnames[1] } },
+
+    -- Scripts to float.
+    { rule = { name = "tsbx" },
+      properties = { floating = true, titlebars_enabled = false } },
+    { rule = { name = "htop" },
+      properties = { floating = true, titlebars_enabled = false } },
+    { rule = { name = "ranger" },
+      properties = { floating = true, titlebars_enabled = false } },
+
+    { rule = { name = "vwsbx", class= "VWorkflow" },
+      properties = { floating = true,
+        titlebars_enabled = false,
+        geometry = { x = 150, y = 150, width = 200, height = 300 } 
+      } },
+
     -- Set Thunderbird to always map on the fourth tag on screen 4.
     { rule = { class = "Thunderbird" },
       properties = { screen = 1, tag = awful.util.tagnames[4] } },
+
     -- Set alsamixer windows to float.
     { rule = { name = "amixer" },
       properties = { floating = true } },
-    -- Set htop windows to float.
-    { rule = { name = "htop" },
-      properties = { floating = true, titlebars_enabled = false } },
-    -- Set ranger window to float.
-    { rule = { name = "ranger" },
-      properties = { floating = true, titlebars_enabled = false } },
 }
 -- }}}
 
