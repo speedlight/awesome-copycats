@@ -159,10 +159,10 @@ keys.globalkeys = my_table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Brightness
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
-              {description = "+10%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end,
-              {description = "-10%", group = "hotkeys"}),
+    awful.key({ "Shift", modkey }, "Prior", function () os.execute("brightnessctl -d intel_backlight s +5") end,
+              {description = "Brightness +5%", group = "hotkeys"}),
+    awful.key({ "Shift", modkey }, "Next", function () os.execute("brightnessctl -d intel_backlight s 5-") end,
+              {description = "Brightness -5%", group = "hotkeys"}),
 
     -- ALSA volume control
     awful.key({ "Control" }, "Up",
