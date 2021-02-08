@@ -20,7 +20,7 @@ local scrlocker    = "slock"
 local mail         = "thunderbird"
 local file_manager = "terminator -T ranger --geometry=1024+768+180 -e ranger"
 local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
-local tsbx         = "terminator -T tsbx -e tsbx.sh"
+local tikx         = "terminator -T tikx -e tikx.sh"
 local vwsbx        = "terminator -T vagrant -c VWorkflow -e vwsbx.sh"
 local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
 local sshooter     = "xfce4-screenshooter"
@@ -234,8 +234,8 @@ keys.globalkeys = my_table.join(
         {description = "xscreensaver", group = "hotkeys"}),
     awful.key({ modkey }, "z", function () awful.spawn(amixer) end,
         {description = "amixer", group = "launcher"}),
-    awful.key({ modkey }, "t", function () awful.spawn(tsbx) end,
-        {description = "tsbx", group = "hotkeys"}),
+    awful.key({ modkey }, "t", function () awful.spawn(tikx) end,
+        {description = "tikx", group = "hotkeys"}),
     awful.key({ modkey }, "v", function () awful.spawn(vwsbx) end,
         {description = "vwsbx", group = "hotkeys"}),
     awful.key({ }, "Print", function () awful.spawn(sshooter) end,
