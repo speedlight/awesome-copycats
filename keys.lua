@@ -1,1 +1,1 @@
-themes/speedlight/keys.lua
+themes/takion/keys.lua

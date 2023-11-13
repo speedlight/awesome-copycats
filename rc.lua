@@ -1,1 +1,1 @@
-/home/speedlight/.config/awesome/themes/speedlight/rc.lua
+themes/takion/rc.lua
