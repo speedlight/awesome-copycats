@@ -368,6 +368,7 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4)),
             wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
             wibox.container.background(wibox.container.margin(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3)),
+            brightness_ctrl.widget,
         },
     }
 

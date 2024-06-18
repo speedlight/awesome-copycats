@@ -14,7 +14,7 @@ local os, math, string = os, math, string
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
-theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/speedlight"
+theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/takion"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "IBM 3270 9"
 theme.fontwibox                                 = "IBM 3270 10"
