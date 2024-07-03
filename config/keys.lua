@@ -1,15 +1,6 @@
--- Standard awesome library
---local gears = require("gears")
---local awful = require("awful")
 require("awful.autofocus")
--- Theme handling library
---local beautiful     = require("beautiful")
--- Notification library
 local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
-
---local modkey       = "Mod4"
---local altkey       = "Mod1"
 
 -- Default applications
 local terminal     = "terminator"
@@ -22,6 +13,14 @@ local file_manager = "terminator -T ranger --geometry=1024+768+180 -e ranger"
 local amixer       = "terminator -T alsamixer --geometry=550x350+240+180 -e alsamixer"
 local htop         = "terminator -T htop --geometry=720x380+240+180 -e htop"
 local sshooter     = "xfce4-screenshooter"
+
+-- {{{ Mouse bindings
+root.buttons(gears.table.join(
+    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    awful.button({ }, 4, awful.tag.viewnext),
+    awful.button({ }, 5, awful.tag.viewprev)
+))
+-- }}}
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -292,4 +291,4 @@ clientbuttons = gears.table.join(
 )
 
 -- Set keys
-root.keys(globalkeys, clientkeys)
+root.keys(globalkeys)
